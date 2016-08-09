@@ -37,8 +37,23 @@ def getNewUIDs(username, password):
 
     return new_UID
 
+def fetch (username, password, UID):
+    Email_arr = []
+    imapObold_UID =  uidFile.readline()
+    imapObj = imapclient.IMAPClient('imap.gmail.com', ssl=True)
+    imapObj.login(username, password)
+    imapObj.select_folder('INBOX', readonly=True)
+    uidFile.write(str(UIDs[-1]))
+    rawMessage = imapObj.fetch([new_UID], ['BODY[]' , 'FLAGS'])
+    message = pyzmail.PyzMessage.factory(rawMessages[new_UID]['BODY[]'])
+    Email_arr.append(int(UIDs[-1]))
+    Email_arr.append(message.get_addresses('from'))
+    Email_arr.append(message.get_addresses('to')) 
+    Email_arr.append(message.text_part.get_payload().decode(message.text_part.charset))
 
-
+    return Email_arr
+    
+                         
 def send (username, password, sender, receivers, message):
     try:
         smtpObj = smtplib.SMTP_SSL('smtp.gmail.com', 465 )
@@ -71,4 +86,6 @@ def listen():
 		
 	return recognize_sphinx(audio)
 
+
+fetch()
 
