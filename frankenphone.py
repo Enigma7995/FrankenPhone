@@ -3,7 +3,7 @@
 import smtplib
 from datetime import date
 import imapclient
-#import speech_recognition as sr
+import speech_recognition as sr
 
 from os import path
 
@@ -37,7 +37,7 @@ def getNewUIDs(username, password):
 
     return new_UID
 
-def fetch (username, password, UID):
+def fetchEmail (username, password, UID):
     Email_arr = []
     imapObold_UID =  uidFile.readline()
     imapObj = imapclient.IMAPClient('imap.gmail.com', ssl=True)
@@ -54,22 +54,22 @@ def fetch (username, password, UID):
     return Email_arr
     
                          
-def send (username, password, sender, receivers, message):
+
+def sendEmail (username, password, sender, receivers, message):
     try:
         smtpObj = smtplib.SMTP_SSL('smtp.gmail.com', 465 )
         smtpObj.ehlo()
         smtpObj.login(username, password)
-        smtpObj.sendmail(sender, receivers, message)         
-        print "Successfully sent email"
+        smtpObj.sendmail(sender, receivers, message)
+        return 0
     except:
-        print "Error: unable to send email"
+        return -1
 
 
-
-def listen():
+def speechToText(wavFileName):
 
 	# obtain path to "english.wav" in the same folder as this script
-	AUDIO_FILE = path.join(path.dirname(path.realpath(__file__)), "agnew_nabobs.wav")
+	AUDIO_FILE = path.join(path.dirname(path.realpath(__file__)), wavFileName)
 
 	# use the audio file as the audio source
 	r = sr.Recognizer()
@@ -84,8 +84,6 @@ def listen():
 	except sr.RequestError as e:
 		print("Sphinx error; {0}".format(e))
 		
-	return recognize_sphinx(audio)
+	return r.recognize_sphinx(audio)
 
-
-fetch()
 
