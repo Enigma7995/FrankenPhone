@@ -1,6 +1,6 @@
 #!/usr/bin/python
 
-import smtplib
+import pyttsx, smtplib, pyaudio
 from datetime import date
 import imapclient
 import speech_recognition as sr
@@ -85,5 +85,11 @@ def speechToText(wavFileName):
 		print("Sphinx error; {0}".format(e))
 		
 	return r.recognize_sphinx(audio)
+    
+def textToSpeech(message) :
+    engine = pyttsx.init() 
+    engine.say(message)
+    engine.runAndWait()
 
 
+textToSpeech("h a book or other written or printed work, regarded in terms of its content rather than its physical formello mr.Robot you will see that i will not finnish") 
